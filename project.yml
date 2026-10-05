@@ -1,0 +1,68 @@
+name: Neat
+
+options:
+  bundleIdPrefix: com.hen
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+  # Icon Composer .icon packages are directories. Without this XcodeGen
+  # expands them and Xcode 26 stops recognising the icon asset.
+  fileTypes:
+    icon:
+      file: true
+  groupSortPosition: top
+
+packages:
+  NeatKit:
+    path: Packages/NeatKit
+
+targets:
+  Neat:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+    dependencies:
+      - package: NeatKit
+        product: NeatUI
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleName: Neat
+        CFBundleDisplayName: Neat
+        LSMinimumSystemVersion: "26.0"
+        NSHighResolutionCapable: true
+        # Not an agent: Neat has a real window and belongs in the Dock.
+        LSUIElement: false
+    entitlements:
+      path: App/Neat.entitlements
+      properties:
+        # Not sandboxed in v1: Neat shells out to yt-dlp and ffmpeg from PATH
+        # and writes to ~/Neat/. Sandboxing that means bundling both binaries
+        # and paying the code-signing cost we deferred.
+        com.apple.security.app-sandbox: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hen.neat
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # One accent for every system control — without this the sidebar
+        # selection stays system blue while the app's own icons are purple.
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        ENABLE_HARDENED_RUNTIME: true
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        COMBINE_HIDPI_IMAGES: true
+
+schemes:
+  Neat:
+    build:
+      targets:
+        Neat: all
+    run:
+      config: Debug
+    archive:
+      config: Release

@@ -1,0 +1,19 @@
+# Generated from project.yml — never the source of truth.
+*.xcodeproj
+*.xcworkspace
+
+.build/
+DerivedData/
+build/
+
+# Screenshots taken during milestone verification.
+*.png
+!Docs/**/*.png
+
+.DS_Store
+xcuserdata/
+*.xcuserstate
+
+# Local DMG build venv and built release artifacts (attach DMGs to GitHub Releases instead).
+.dmgvenv/
+release/
